@@ -21,49 +21,50 @@
           <!--<span class="glyphicon glyphicon-info-sign"></span>-->
           Edit company form</h3>
         <form class="form-horizontal" id="edit-form">
-            Company name <input type="text" id="editCompanyName" >
-            New name <input type="text" id="newName" >
-            <br>
-            New earnings <input type="text" id="newEarnings" size="15" >
-            New parent name<input type="text" id="newParentName" >
-            <button type="submit" class="btn btn-primary " id="edit">Edit</button>
+            <p>Company name  <input type="text" id="editCompanyName" ></p>
+            <p>New name <input type="text" id="newName" ></p>
+            <p>New earnings <input type="text" id="newEarnings" size="15" ></p>
+            <p>New parent name<input type="text" id="newParentName" ></p>
+            <p><button type="submit" class="btn btn-primary " id="edit">Edit</button></p>
         </form>
     </div>
     <div class="col-md-6">
       <h3><span class="glyphicon glyphicon-link"></span>Create company form :</h3>
       <form class="form-horizontal" id="search-form">
-		<label class="col-sm-2 control-label">Company name</label>
-		<div class="col-sm-10">
+
+          <p><div class="col-sm-10">
+                    <label class="col-sm-2 control-label">Company name</label>
 		    <input type=text class="form-control" id="companyName" size="30">
                 </div>        
+      </p>
+      <p>      <div class="col-sm-10">
                     <label class="col-sm-2 control-label">Earnings</label>
-                <div class="col-sm-10">
                     <input type=text class="form-control" id="earnings" size="18">
                 </div>
-		
-		<label class="col-sm-2 control-label">Parent Name</label>
-		<div class="col-sm-10">
-                        <input type=text class="form-control" id="parentName" size="30">
+      </p>
+      <p>	<div class="col-sm-10">
+                    <label class="col-sm-2 control-label">Parent Name</label>
+                    <input type=text class="form-control" id="parentName" size="30">
 	        </div>
-		<button type="submit" id="createbtn"
+      </p>
+            	<button type="submit" id="createbtn"
 			class="btn btn-primary ">Create</button>
-	    </form>
+	</form>
       
-      <h3><span class="glyphicon glyphicon-link"></span> Delete company form</h3>
-      Company name <input type="text" id="delCompanyName" >
-            <br>
+      <p><h3><span class="glyphicon glyphicon-link"></span> Delete company form</h3></p>
+      <p>Company name <input type="text" id="delCompanyName" ></p>
         <form class="form-horizontal" id="del-one-form">
             <button type="submit" class="btn btn-primary " id="delete">Delete</button>
         </form>
             <br>
         <form class="form-horizontal" id="del-tree-form">
-
             <button type="submit" class="btn btn-primary " id="delTree">Delete with childs</button>
         </form>
       </div>
   </div> 
   
   <!-- row -->
+  <br>
   <div class="alert alert-info text-center" role="alert" id="output">
        OutPut here
   </div>
