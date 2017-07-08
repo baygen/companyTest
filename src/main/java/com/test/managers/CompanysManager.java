@@ -8,12 +8,13 @@ package com.test.managers;
 import com.test.entity.Company;
 
 import com.test.managers.dao.BasicDAO;
+import javax.annotation.Resource;
 
 /**
  *
  * @author Buy
  */
-
+@Resource
 public class CompanysManager implements ManagerCRUDExtended {
 
     private final BasicDAO dao;
