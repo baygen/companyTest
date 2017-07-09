@@ -110,7 +110,7 @@
 		$.ajax({
 			type : "POST",
 			contentType : "application/json",
-			url : "${home}create",
+			url : "/create",
 			data : JSON.stringify(editData),
 			dataType : 'json',
 			timeout : 100000,
@@ -140,7 +140,7 @@
         $.ajax({
 		type : "POST",
 		contentType : "application/json",
-		url : "${home}edit",
+		url : "$/edit",
 		data : JSON.stringify(editData),
 		dataType : 'json',
 		timeout : 100000,
@@ -166,7 +166,7 @@
         $.ajax({
 		type : "POST",
 		contentType : "application/json",
-		url : "${home}delete",
+		url : "/delete",
 		data : JSON.stringify(editData),
 		dataType : 'json',
 		timeout : 100000,
@@ -191,7 +191,7 @@
         $.ajax({
 		type : "POST",
 		contentType : "application/json",
-		url : "${home}delete/tree",
+		url : "/delete/tree",
 		data : JSON.stringify(editData),
 		dataType : 'json',
 		timeout : 100000,

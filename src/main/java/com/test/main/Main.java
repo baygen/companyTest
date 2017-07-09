@@ -55,7 +55,7 @@ public class Main {
   public @ResponseBody AjaxResponseBody createCompany(@RequestBody SearchCriteria input) {
     AjaxResponseBody result = new AjaxResponseBody();
     
-    result.setCode("Create methad invoked");
+    result.setCode("Create method invoked");
     result.setMsg("Massage from create method!");
   return result;
   }
