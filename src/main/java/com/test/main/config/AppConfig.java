@@ -10,6 +10,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.test.managers.CompanysManager;
 import com.test.managers.ManagerCRUD;
+import com.test.managers.ManagerCRUDExtended;
 import com.test.managers.dao.BasicDAO;
 import com.test.managers.dao.DAOManager;
 import org.springframework.context.annotation.Bean;
@@ -39,7 +40,7 @@ public class AppConfig {
     }
     
     @Bean
-    public ManagerCRUD manager(){
+    public ManagerCRUDExtended manager(){
         return new CompanysManager(dao());
     } 
     
