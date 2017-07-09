@@ -22,7 +22,6 @@ import com.test.datamodels.SearchCriteria;
 import com.test.datamodels.Views;
 import com.test.managers.ManagerCRUDExtended;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
@@ -54,10 +53,15 @@ public class Main {
   @RequestMapping("/create")
   public @ResponseBody AjaxResponseBody createCompany(@RequestBody SearchCriteria input) {
     AjaxResponseBody result = new AjaxResponseBody();
-    
-    result.setCode("Create method invoked");
-    result.setMsg("Massage from create method!");
-  return result;
+        try{
+        checkInputAndCreateCompany(input);
+        result.setMsg(manager.getAllCompanyToString());
+        result.setCode("Company added");
+        }catch(Exception e){
+            result.setCode(e.getMessage());
+            result.setMsg(manager.getAllCompanyToString());
+        }
+        return result;
   }
   
   @JsonView(Views.Public.class)
@@ -113,4 +117,18 @@ public class Main {
         result.setMsg(manager.getAllCompanyToString());
         return result;
     }
+
+    private void checkInputAndCreateCompany(SearchCriteria input) throws Exception{
+        
+        String name = input.getCompanyName();
+        int earns = input.getEarnings();
+        String parentName = input.getParentName();
+
+        if (!name.equals("") && !parentName.equals("")) {
+            manager.createAndSaveCompany(name, earns, parentName);
+        } else if (!name.trim().equals("")) {
+            manager.createAndSaveCompany(name, earns);
+        }
+    }
+    
 }

@@ -65,7 +65,7 @@
   
   <!-- row -->
   <br>
-  <p id="errorfield"></p>
+  <p id="errorfield" style="color: red"></p>
   
   <div class="alert alert-info text-center" role="alert" id="output">
        OutPut here
@@ -140,7 +140,7 @@
         $.ajax({
 		type : "POST",
 		contentType : "application/json",
-		url : "$/edit",
+		url : "/edit",
 		data : JSON.stringify(editData),
 		dataType : 'json',
 		timeout : 100000,

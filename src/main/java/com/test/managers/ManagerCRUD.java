@@ -16,6 +16,6 @@ public interface ManagerCRUD  {
     public Company createAndSaveCompany(String name, int earnings) throws Exception;
     public Company createAndSaveCompany(String name, int earnings, String parentName)throws Exception;
     
-    public void delete(String companyName);
+    public void delete(String companyName)throws Exception;
     
 }

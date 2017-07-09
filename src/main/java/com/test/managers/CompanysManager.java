@@ -8,6 +8,8 @@ package com.test.managers;
 import com.test.entity.Company;
 
 import com.test.managers.dao.BasicDAO;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 
 /**
@@ -99,16 +101,20 @@ public class CompanysManager implements ManagerCRUDExtended {
     }
 
     @Override
-    public void delete(String companyName) {
+    public void delete(String companyName) throws Exception{
         Company company = dao.getByName(companyName);
         replaceFromPathWith(company, "");
         dao.delete(company);
     }
 
     @Override
-    public void deleteTree(String rootNameToDelete) {
+    public void deleteTree(String rootNameToDelete) throws Exception{
         dao.getChildsOf(rootNameToDelete).forEach((company) -> {
-            dao.delete(company);
+            try {
+                dao.delete(company);
+            } catch (Exception ex) {
+                Logger.getLogger(CompanysManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
         dao.delete(dao.getByName(rootNameToDelete));
     }

@@ -15,7 +15,7 @@ public interface ManagerCRUDExtended extends ManagerCRUD{
     public void editParent(String companyToEdit,String newParentName) 
                 throws Exception;
     public void rename(String curName, String newName);
-    public void deleteTree(String rootNameToDelete);
+    public void deleteTree(String rootNameToDelete)throws Exception;
     public String toStringTreeOf(Company company);
     public String getAllCompanyToString();
 

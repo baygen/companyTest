@@ -18,7 +18,7 @@ public interface BasicDAO {
 
     void save  (Company company)throws Exception;
     
-    void delete(Company company);
+    void delete(Company company) throws Exception;
     
     List<Company> getRoots();
     

@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Resource;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -52,8 +51,11 @@ public class DAOManager implements BasicDAO {
     }
     
     @Override
-    public void delete(Company company) {
+    public void delete(Company company)throws Exception{
+        if(exist(company.getName())){
         template.remove(company);
+        }
+        throw new Exception("This company not exist!");
     }
 
     @Override
