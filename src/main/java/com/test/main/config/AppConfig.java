@@ -5,18 +5,15 @@
  */
 package com.test.main.config;
 
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.test.managers.CompanysManager;
-import com.test.managers.ManagerCRUD;
 import com.test.managers.ManagerCRUDExtended;
 import com.test.managers.dao.BasicDAO;
 import com.test.managers.dao.DAOManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.stereotype.Component;
 
 /**
  *
@@ -31,7 +28,7 @@ public class AppConfig {
     @Bean
     public MongoTemplate mongoTemplate(){
         String uri = "mongodb://oleg:root@ds153422.mlab.com:53422/testcompany";
-        return new MongoTemplate(new MongoClient(new MongoClientURI(uri)), "maincompany");
+        return new MongoTemplate(new MongoClient(new MongoClientURI(uri)), "testcompany");
     }
     
     @Bean 
