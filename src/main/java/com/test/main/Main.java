@@ -16,33 +16,30 @@
 
 package com.test.main;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.test.datamodels.AjaxResponseBody;
+import com.test.datamodels.SearchCriteria;
+import com.test.datamodels.Views;
+import com.test.managers.ManagerCRUDExtended;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Map;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @SpringBootApplication
 public class Main {
 
-  @Value("${spring.datasource.url}")
-  private String dbUrl;
+//  @Value("${spring.datasource.url}")
+//  private String dbUrl;
 
   @Autowired
-  private DataSource dataSource;
+  private ManagerCRUDExtended manager;
 
   public static void main(String[] args) throws Exception {
     SpringApplication.run(Main.class, args);
@@ -52,37 +49,68 @@ public class Main {
   String index() {
     return "index";
   }
-
+  
+  @JsonView(Views.Public.class)
   @RequestMapping("/create")
-  String db(Map<String, Object> model) {
-    try (Connection connection = dataSource.getConnection()) {
-      Statement stmt = connection.createStatement();
-      stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)");
-      stmt.executeUpdate("INSERT INTO ticks VALUES (now())");
-      ResultSet rs = stmt.executeQuery("SELECT tick FROM ticks");
-
-      ArrayList<String> output = new ArrayList<String>();
-      while (rs.next()) {
-        output.add("Read from DB: " + rs.getTimestamp("tick"));
-      }
-
-      model.put("records", output);
-      return "db";
-    } catch (Exception e) {
-      model.put("message", e.getMessage());
-      return "error";
-    }
+  public @ResponseBody AjaxResponseBody createCompany(@RequestBody SearchCriteria input) {
+    AjaxResponseBody result = new AjaxResponseBody();
+    
+    result.setCode("Create methad invoked");
+    result.setMsg("Massage from create method!");
+  return result;
   }
-
-  @Bean
-  public DataSource dataSource() throws SQLException {
-    if (dbUrl == null || dbUrl.isEmpty()) {
-      return new HikariDataSource();
-    } else {
-      HikariConfig config = new HikariConfig();
-      config.setJdbcUrl(dbUrl);
-      return new HikariDataSource(config);
+  
+  @JsonView(Views.Public.class)
+    @RequestMapping(value = "/edit")
+    public AjaxResponseBody edit(@RequestBody SearchCriteria input) throws Exception {
+        AjaxResponseBody result = new AjaxResponseBody();
+        String companyToEdit = input.getCompanyName();
+        String newParentname = input.getParentName();
+        String newName = input.getNewName();
+        int newearns = input.getEarnings();
+        
+        System.out.println(input);
+                
+        if(!companyToEdit.equals("")){
+            if(!newParentname.equals(""))
+                manager.editParent(companyToEdit, newParentname);
+            if(newearns!=0)
+                manager.editEarnings(companyToEdit, newearns);
+            if(!(newName.trim().equals("")))
+                manager.rename(companyToEdit, newName);
+        result.setCode("EditCompany method ok!");
+        }else{
+             result.setCode("Edit compay method data!");
+        }
+        result.setMsg(manager.getAllCompanyToString());
+        return result;
     }
-  }
 
+
+    @JsonView(Views.Public.class)
+    @RequestMapping(value = "/delete")
+    public AjaxResponseBody deleteOne(@RequestBody SearchCriteria input) throws Exception {
+        AjaxResponseBody result = new AjaxResponseBody();
+        if (!input.getCompanyName().trim().equals("")) {
+            manager.delete(input.getCompanyName());
+            result.setCode("Ok!");
+            result.setMsg(manager.getAllCompanyToString());
+        }else{
+            result.setCode("Wrong company name");
+            result.setMsg(manager.getAllCompanyToString());
+        }
+        return result;
+    }
+
+    @JsonView(Views.Public.class)
+    @RequestMapping(value = "/delete/tree")
+    public AjaxResponseBody deleteTree(@RequestBody SearchCriteria input) throws Exception {
+        AjaxResponseBody result= new AjaxResponseBody();
+        if (!input.getCompanyName().equals("")){
+            manager.deleteTree(input.getCompanyName());
+            result.setCode("Deleted!");
+        }
+        result.setMsg(manager.getAllCompanyToString());
+        return result;
+    }
 }

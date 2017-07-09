@@ -18,4 +18,6 @@ public interface ManagerCRUDExtended extends ManagerCRUD{
     public void deleteTree(String rootNameToDelete);
     public String toStringTreeOf(Company company);
     public String getAllCompanyToString();
+
+    public void editEarnings(String companyToEdit, int newearns);
 }
