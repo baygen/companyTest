@@ -20,7 +20,10 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.test.datamodels.AjaxResponseBody;
 import com.test.datamodels.SearchCriteria;
 import com.test.datamodels.Views;
+import com.test.entity.Company;
 import com.test.managers.ManagerCRUDExtended;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -33,9 +36,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @SpringBootApplication
 public class Main {
-
-//  @Value("${spring.datasource.url}")
-//  private String dbUrl;
 
   @Autowired
   private ManagerCRUDExtended manager;
@@ -54,14 +54,13 @@ public class Main {
   public @ResponseBody AjaxResponseBody createCompany(@RequestBody SearchCriteria input) {
     AjaxResponseBody result = new AjaxResponseBody();
         try{
-        checkInputAndCreateCompany(input);
-        result.setMsg(manager.getAllCompanyToString());
-        result.setCode("Company added");
+            checkInputAndCreateCompany(input);
+            result.setCode("Company added");
         }catch(Exception e){
             result.setCode(e.getMessage());
-            result.setMsg(manager.getAllCompanyToString());
         }
-        return result;
+    result.setMsg(manager.getAllCompanyToString());
+    return result;
   }
   
   @JsonView(Views.Public.class)
@@ -93,27 +92,36 @@ public class Main {
 
     @JsonView(Views.Public.class)
     @RequestMapping(value = "/delete")
-    public AjaxResponseBody deleteOne(@RequestBody SearchCriteria input) throws Exception {
+    public AjaxResponseBody deleteOne(@RequestBody SearchCriteria input) {
         AjaxResponseBody result = new AjaxResponseBody();
-        if (!input.getCompanyName().trim().equals("")) {
-            manager.delete(input.getCompanyName());
-            result.setCode("Ok!");
-            result.setMsg(manager.getAllCompanyToString());
-        }else{
+        if (input.getCompanyName().trim().equals("")) {
             result.setCode("Wrong company name");
-            result.setMsg(manager.getAllCompanyToString());
+        }else{
+            try{
+                manager.delete(input.getCompanyName());
+                result.setCode("Ok!");
+            }catch(Exception e){
+                result.setCode(e.getMessage());
+            }
         }
+        result.setMsg(manager.getAllCompanyToString());
         return result;
     }
 
     @JsonView(Views.Public.class)
     @RequestMapping(value = "/delete/tree")
-    public AjaxResponseBody deleteTree(@RequestBody SearchCriteria input) throws Exception {
+    public AjaxResponseBody deleteTree(@RequestBody SearchCriteria input) {
         AjaxResponseBody result= new AjaxResponseBody();
-        if (!input.getCompanyName().equals("")){
-            manager.deleteTree(input.getCompanyName());
-            result.setCode("Deleted!");
-        }
+        if (input.getCompanyName().equals("")){
+            result.setCode("Name can't be empty");
+        } else {
+            try {
+                manager.deleteTree(input.getCompanyName());
+                result.setCode("Deleted!");
+            } catch (Exception ex) {
+                result.setCode(ex.getMessage());
+            }
+      }
         result.setMsg(manager.getAllCompanyToString());
         return result;
     }

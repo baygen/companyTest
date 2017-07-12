@@ -6,7 +6,6 @@
 package com.test.entity;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -31,7 +30,7 @@ public class Company {
     private int totalEarnings;
 
     @Transient
-    private final Collection<Company> childs = new HashSet<>();
+    public final Collection<Company> childs = new HashSet<>();
 
     public Company() {
     }
@@ -60,9 +59,6 @@ public class Company {
         this.id = id;
     }
 
-//    public String getRoot() {
-//        return root;
-//    }
     public String getName() {
         return name;
     }
@@ -104,26 +100,15 @@ public class Company {
 
     @Override
     public String toString() {
-        if (totalEarnings == 0) 
-            return name + " | " + earnings;
-        return name + " | " + earnings + " | " + totalEarnings;
+        StringBuffer sb = new StringBuffer(name + " | " + earnings);
+        return (totalEarnings == 0)?sb.toString():sb.append( " | ").append(totalEarnings).toString();
     }
 
     public String treeToString(String separator) {
         final StringBuilder sb = new StringBuilder();
-        sb.append(" ");
-
-        char[] pathChar = path.toCharArray();
-        for (int i = 0; i < pathChar.length; i++) 
-            if (pathChar[i] == Company.PATH_SEPARATOR.charAt(0)) 
-                sb.append("-");
-        
-        sb.append(this.toString()).append(separator);
-        if (!getChilds().isEmpty()) {
-            for (final Company company : this.getChilds()) {
-                sb.append(company.treeToString(separator));
-            }
-        }
+        sb.append(" ").append(indent()).append(this.toString())
+                .append(separator)
+                .append(childsToString(separator));
         return sb.toString();
     }
 
@@ -134,4 +119,25 @@ public class Company {
     public void appendChildsEarnings(int childEarnings) {
         this.totalEarnings = this.earnings + childEarnings;
     }
+
+    private String indent() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < path.toCharArray().length; i++) 
+            if (path.toCharArray()[i] == Company.PATH_SEPARATOR.charAt(0)) 
+                sb.append("-");
+        return sb.toString();
+    }
+
+    private String childsToString(String separator) {
+        if (getChilds().isEmpty()) {
+            return "";
+        } else {
+            StringBuffer sb = new StringBuffer();
+                for (Company child : childs) 
+                    sb.append(child.treeToString(separator));
+            return sb.toString();
+        }
+        
+    }
+
 }

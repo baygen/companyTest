@@ -51,6 +51,7 @@ public class CompanysManager implements ManagerCRUDExtended {
         dao.updateNameOrParent(company, "path", newPath);
     }
     
+    @Override
     public void editEarnings(String company, int earnings){
         dao.updateEarnings(dao.getByName(company), earnings);
     }
@@ -59,7 +60,6 @@ public class CompanysManager implements ManagerCRUDExtended {
     public void rename(String currentName, String newName) {
         Company company = dao.getByName(currentName);
         String curPath = company.getPath();
-        System.out.println("com.springdemo.managers.CompanysManager.rename()------------------------"+newName);
         String newPath = curPath.replace(currentName, newName);
         dao.updateNameOrParent(company, "name", newName);
         replaceFromPathWith(company, newName + Company.PATH_SEPARATOR);
@@ -78,16 +78,16 @@ public class CompanysManager implements ManagerCRUDExtended {
     }
 
     @Override
-    public Company createAndSaveCompany(String name, int earnings, String parentName)
-            throws Exception {
-        if (name.equals(parentName)) {
-            throw new Exception("Confuse name");
-        } else if (!dao.exist(parentName)) {
-            throw new Exception("Parent company  not exist");
-        } else {
+    public Company createAndSaveCompany(
+            String name, int earnings, String parentName)throws Exception {
+        
+        validateNames(name,parentName);
+        if (dao.exist(parentName)) {
             Company company = new Company(name, earnings, dao.getByName(parentName));
             dao.save(company);
             return company;
+        } else {
+            throw new Exception("Parent company  not exist");
         }
     }
 
@@ -146,6 +146,11 @@ public class CompanysManager implements ManagerCRUDExtended {
             newPath = child.getPath().replace(path, substitute);
             dao.updateNameOrParent(child, "path", newPath);
         }
+    }
+
+    private void validateNames(String name, String parentName) throws Exception{
+        if (name.equals(parentName)) 
+            throw new Exception("Confuse name");
     }
 
 }
