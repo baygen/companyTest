@@ -62,7 +62,7 @@ public class Main {
   
   @JsonView(Views.Public.class)
     @RequestMapping(value = "/edit")
-    public AjaxResponseBody edit(@RequestBody SearchCriteria input) throws Exception {
+    public @ResponseBody AjaxResponseBody edit(@RequestBody SearchCriteria input) throws Exception {
         AjaxResponseBody result = new AjaxResponseBody();
         String companyToEdit = input.getCompanyName();
         String newParentname = input.getParentName();
@@ -72,15 +72,19 @@ public class Main {
         System.out.println(input);
                 
         if(!companyToEdit.equals("")){
+            try{
             if(!newParentname.equals(""))
                 manager.editParent(companyToEdit, newParentname);
             if(newearns!=0)
                 manager.editEarnings(companyToEdit, newearns);
             if(!(newName.trim().equals("")))
                 manager.rename(companyToEdit, newName);
+            }catch(Exception e ){
+                result.setCode(e.getMessage());
+            }
         result.setCode("EditCompany method ok!");
         }else{
-             result.setCode("Edit compay method data!");
+             result.setCode("Edit data wrong!");
         }
         result.setMsg(manager.getAllCompanyToString());
         return result;
@@ -89,7 +93,7 @@ public class Main {
 
     @JsonView(Views.Public.class)
     @RequestMapping(value = "/delete")
-    public AjaxResponseBody deleteOne(@RequestBody SearchCriteria input) {
+    public @ResponseBody AjaxResponseBody deleteOne(@RequestBody SearchCriteria input) {
         AjaxResponseBody result = new AjaxResponseBody();
         if (input.getCompanyName().trim().equals("")) {
             result.setCode("Wrong company name");
@@ -107,7 +111,7 @@ public class Main {
 
     @JsonView(Views.Public.class)
     @RequestMapping(value = "/delete/tree")
-    public AjaxResponseBody deleteTree(@RequestBody SearchCriteria input) {
+    public @ResponseBody AjaxResponseBody deleteTree(@RequestBody SearchCriteria input) {
         AjaxResponseBody result= new AjaxResponseBody();
         if (input.getCompanyName().equals("")){
             result.setCode("Name can't be empty");
